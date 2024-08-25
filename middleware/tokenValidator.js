@@ -8,10 +8,13 @@ const tokenValidator = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, "secretkey");
-    const user = await User.findById(decoded._id);
+
+    const user = await User.findById(decoded.id);
+
     if (!user) {
-      return res.status(401).json({ message: "unauthorized" });
+      return res.status(401).json({ message: "Unauthorized: User not found" });
     }
+
     req.user = user;
     next();
   } catch (error) {
